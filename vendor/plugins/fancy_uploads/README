@@ -1,0 +1,22 @@
+FancyUploads
+============
+
+Introduction goes here.
+
+
+Example
+=======
+
+Steps to setting fancy uploads:
+
+gem install haml
+cd /to/rails/app
+haml --rails .
+script/plugin install git://github.com/thoughtbot/paperclip.git
+script/plugin install git://github.com/markcatley/responds_to_parent.git
+
+
+Example goes here.
+
+
+Copyright (c) 2010 [Shahrier Akram], released under the MIT license

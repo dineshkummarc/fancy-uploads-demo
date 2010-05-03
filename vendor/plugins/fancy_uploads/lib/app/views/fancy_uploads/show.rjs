@@ -1,0 +1,45 @@
+#content = ActiveSupport::JSON.encode(render :partial => "fancy_uploads/fancy_upload", :locals => { :fancy_upload => @fancy_upload })
+
+fancy_uploads_dom_id = "#{@attachable.class.to_s}_#{@attachable.id}_fancy_uploads"
+container_dom_id = "#{fancy_uploads_dom_id}_container"
+
+pagination_html = ActiveSupport::JSON.encode(will_paginate(@fancy_uploads))
+page << "$j('div##{container_dom_id} div.pagination_container').html(#{pagination_html});"
+
+# clear out the existing items
+page << "$j('ul##{fancy_uploads_dom_id}').html('');"
+@fancy_uploads.each do |fancy_upload|
+  fancy_uploads_html = ActiveSupport::JSON.encode(render :partial => "fancy_uploads/fancy_upload", :locals => { :fancy_upload => fancy_upload })
+  page << "$j('ul##{fancy_uploads_dom_id}').append(#{fancy_uploads_html});"
+end
+
+# applying fancybox interaction  
+page << "$j('a.fancybox_image').fancybox();"
+
+# notification interaction
+if @fancy_uploads.length > 0
+  page << growl("Uploads loaded.")
+end
+
+# sorting 
+if @fancy_uploads.length > 1
+  page << "$j('div##{container_dom_id} div.sorting_container').show()"
+  page << "$j('div##{container_dom_id} a.sort_field').css({'font-weight':'normal'})"
+  page << "$j('div##{container_dom_id} a.#{@sort_field}').css({'font-weight':'bold'})"  
+else
+  page << "$j('div##{container_dom_id} div.sorting_container').hide()"
+  page << "$j('div##{container_dom_id} div.add_new').fadeIn();"  
+end
+
+# new link visibility
+if @fancy_uploads.length > 0
+  # for single-relation attachable
+  if @attachable.respond_to?@upload_model_name
+    page << "$j('div##{container_dom_id} div.add_new').fadeOut();"
+  end 
+end
+
+
+
+
+

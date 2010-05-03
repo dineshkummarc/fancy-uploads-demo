@@ -1,0 +1,3 @@
+page << growl_reset
+
+page << growl("Fancy Uploads Error:<br/>#{@ex.message}","error")

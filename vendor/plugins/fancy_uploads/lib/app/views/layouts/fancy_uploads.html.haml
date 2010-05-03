@@ -1,0 +1,16 @@
+!!! 1.1
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en", :lang => "en"}
+  %head
+    %meta{:"http-equiv" => "content-type", :content => "text/html;charset=UTF-8"}  
+    %title= yield :title
+    =javascript_include_tag :defaults
+    :javascript
+      // this is where standard javascript will go!
+
+    %style{:type => "text/css"}
+      :plain 
+        #wrapper { width:800px; margin: 10px auto; }
+  %body
+    #wrapper
+      %p{:style => "color:green"}=flash[:notice]
+      .content#content= yield

@@ -1,0 +1,5 @@
+content = ActiveSupport::JSON.encode(render :partial => "fancy_uploads/fancy_upload", :locals => { :fancy_upload => @fancy_upload })
+
+fancy_uploads_dom_id = "#{@attachable.class.to_s}_#{@attachable.id}_fancy_uploads"
+
+page << "$j('##{fancy_uploads_dom_id}').prepend(#{content});"

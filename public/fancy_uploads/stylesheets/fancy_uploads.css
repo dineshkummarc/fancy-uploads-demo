@@ -1,0 +1,68 @@
+div.fancy_uploads_container ul.fancy_uploads { margin: 0px; padding: 0px; }
+
+div.fancy_uploads_container ul.fancy_uploads li.fancy_upload { 
+  height: 170px;
+  width: 200px; 
+  float: left;
+  margin: 0px 0px 10px 10px;  
+  padding: 5px;
+  list-style: none;
+  border-top: 1px solid #9E9E9E;
+  border-left: 1px solid #9E9E9E;
+  border-right: 2px solid #9E9E9E;
+  border-bottom: 2px solid #9E9E9E;
+  background-color: #ECECEC;
+  -moz-box-shadow: 2px 2px 3px #686868; -webkit-box-shadow: 2px 2px 3px #686868;
+}
+
+div.fancy_uploads_container div.pagination_container, div.sorting_container { padding: 5px; }
+
+/* New Link */
+div.fancy_uploads_container a#new_fancy_upload_link { top: 5px; position: relative; }
+div.fancy_uploads_container div.add_new { 
+  background: url('../images/icons/32x32/Add.png') no-repeat 0 0; 
+  padding: 0px 0px 0px 40px;
+  margin-bottom:5px;
+  font-size: 14px;
+}
+
+/* Standard Helpers */
+div.fancy_uploads_container div.float_left { float: left; }
+div.fancy_uploads_container div.float_right { float: right; }
+div.fancy_uploads_container div.clear { clear: both; }
+div.fancy_uploads_container div.fancy_upload_spinner { 
+  background: url('../images/icons/32x32/spinner.gif') no-repeat 0 0; 
+  width: 32px; height: 32px; margin-left: 5px; 
+  display : none;
+}
+
+div.fancy_uploads_container a.fancybox_image, a.fu_download_link { border: none; text-decoration: none; background: none;}
+div.fancy_uploads_container a.fancybox_image:hover, a.fu_download_link { border: none; text-decoration: none; background: none;}
+div.fancy_uploads_container a.fancybox_image img, a.fu_download_link img { border: none; }
+div.fancy_uploads_container a.fancybox_image img.thumb_image { 
+  border: none;
+  -moz-box-shadow: 2px 2px 3px #686868; 
+  -webkit-box-shadow: 2px 2px 3px #686868; 
+}
+
+div.fancy_uploads_container div.uploaded_item div.uploaded_item_actions {
+  margin-left: 5px;
+}
+
+ul.fu_upload_info li { margin-bottom: 10px; }
+
+/* 
+ input:file styling technique adopted from
+ http://www.quirksmode.org/dom/inputfile.html
+*/
+div.fancy_uploads_container div.file_inputs { position: relative; margin-bottom: 20px; }
+div.fancy_uploads_container div.fake_file { position: absolute; top: 0px; left: 20px; }
+div.fancy_uploads_container input.file { 
+  position: relative; text-align: right; 
+  -moz-opacity:0 ; filter:alpha(opacity: 0); opacity: 0; 
+  z-index: 2; 
+  height: 32px; 
+}
+div.fancy_uploads_container input.fake_input { 
+  border: none; border-bottom: 1px dotted #ccc; background: none; padding: 0px; width: 140px; height: 20px; 
+}

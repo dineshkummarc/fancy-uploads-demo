@@ -1,0 +1,65 @@
+-# Expects local_assigns[:attachable_object]
+-# Class: local_assigns[:attachable_object].class < ActiveRecord::Base
+/ Fancy Uploads Begin
+-# CSS
+- fancy_uploads_dom_id = "#{attachable_object.class.to_s}_#{attachable_object.id}_fancy_uploads"
+- container_dom_id = "#{fancy_uploads_dom_id}_container"
+
+-#'HTML'
+%div.fancy_uploads_container{ :id => container_dom_id }
+  -# new upload link
+  %p
+    %div.add_new{:style=> "height:32px;"}
+      %a.new_fancy_upload_link{ :href => new_fancy_upload_path(:klass => attachable_object.class, :id => attachable_object.id, :upload_model => options[:upload_model] )}
+        = options[:new_upload_label]
+      = fu_spinner_html :style => "margin-left:5px;vertical-align:top;", :class => "new_upload_spinner"        
+
+  -# sorting container
+  %div.sorting_container{:style=>"display:none;"}
+    Sort by:  
+    = link_to "Updated", show_fancy_uploads_path(:klass => attachable_object.class, :id => attachable_object.id, :sort => "updated_at", :upload_model => options[:upload_model], :per_page => options[:per_page]), :class => "updated_at sort_field"
+    &darr;
+    | 
+    = link_to "Created", show_fancy_uploads_path(:klass => attachable_object.class, :id => attachable_object.id, :sort => "created_at", :upload_model => options[:upload_model], :per_page => options[:per_page]), :class => "created_at sort_field"
+    &darr;   
+        
+  -# pagination container
+  %div.pagination_container
+
+  -# upload listing
+  %ul.fancy_uploads{:id => fancy_uploads_dom_id}    
+  
+  -# clear out the floating lists
+  %div.clear
+  
+  -# pagination container  
+  %div.pagination_container
+
+- if options[:include_jquery]
+  = javascript_include_tag "/fancy_uploads/javascripts/jquery-1.4.2.min.js"
+= javascript_include_tag "/fancy_uploads/javascripts/fancy_uploads.js"
+
+-# Make the first batch call
+:javascript  
+  $j(document).ready(function(){
+    $j.ajax({
+      type: "GET",
+      cache : false,
+      async: true,
+      timeout: 60 * 1000,
+      dataType: "script",        
+      url: "#{show_fancy_uploads_path(:klass => attachable_object.class, :id => attachable_object.id, :sort => "updated_at", :upload_model => options[:upload_model], :per_page => options[:per_page] )}", 
+      beforeSend: function() {
+        $j("##{container_dom_id} div.add_new img.new_upload_spinner").show();
+      },
+      success: function() {
+        $j("##{container_dom_id} div.add_new img.new_upload_spinner").hide();      
+      },
+      error: function(xhr, status, error_thrown) {
+        // hide spinner
+        $j("##{container_dom_id} div.add_new img.new_upload_spinner").hide();
+        $j.jGrowl("There was an error:<br/>" + xhr.status + ": " + xhr.statusText +  ".<br/>Please try reloading the page.");
+      }   
+    });
+  });
+/ Fancy Uploads End 

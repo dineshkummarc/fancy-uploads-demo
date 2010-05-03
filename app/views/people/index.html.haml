@@ -1,0 +1,153 @@
+%style{:type=>"text/css"}
+  :plain
+    ul { margin-top: 10px; }
+    li { margin-bottom: 10px; }    
+  
+%h1
+  Fancy Uploads Plugin Demo 
+
+%div{:style=>"font-size:16px;"}
+  :plain
+    => 
+  = link_to_function "Usage Instructions", "$('#instructions').toggle('slow')"
+  
+%ul#instructions{:style=>"display:none;"}
+  %li
+    %strong
+      Prerequisite Frameworks
+    %ul
+      %li
+        = link_to "Ruby on Rails Version >= 2.2.2 and < 3", "http://rubyonrails.org/", :target => "_blank"
+      %li
+        = link_to "JQuery Version >= 1.4.2", "http://jquery.com/", :target => "_blank"
+        (Optional. Fancy Uploads plugin loads the jQuery library by default.)
+
+  %li 
+    %strong  
+      Prerequisite Rails Plugins (standing on the shoulder of giants)
+    %ul
+      %li
+        = link_to "paperclip", "http://github.com/thoughtbot/paperclip", :target => "_blank"
+      %li
+        = link_to "will_paginate", "http://github.com/mislav/will_paginate", :target => "_blank"
+      %li  
+        = link_to "haml", "http://github.com/nex3/haml", :target => "_blank"
+      %li
+        = link_to "responds_to_parent", "http://github.com/markcatley/responds_to_parent", :target => "_blank"        
+        
+  %li  
+    %strong
+      Plugin Installation. 
+    %ul
+      %li 
+        From 
+        %strong
+          RAILS_ROOT
+        , install the plugin into your rails app.
+        %pre
+          script/plugin install git://github.com/gdakram/fancy_uploads.git
+      %li
+        Update your 
+        %strong RAILS_ROOT/config/routes.rb
+        file with:
+        %pre
+          :preserve
+            ActionController::Routing::Routes.draw do |map|
+              ....
+              map.fancy_upload_routes
+              ....
+            end
+      %li
+        From 
+        %strong
+          RAILS_ROOT
+        , run the following rake task:
+        %pre
+          rake fancy_uploads:setup
+          
+      %li
+        From 
+        %strong
+          RAILS_ROOT
+        , run the db migration to create the fancy uploads table:
+        %pre
+          rake db:migrate
+      
+      %li
+        %strong
+          FancyUpload 
+        model needs to have a relation with whatever model needing it. 
+        %br
+        For this demo purpose, the Person model looks like:
+        %pre
+          :preserve
+            class Person < ActiveRecord::Base
+              ....
+              has_many :fancy_uploads, :as => :attachable
+              ....
+            end
+            
+        %li
+          Now for the view, provided if you have a @person object available, all you have to do is:
+          %p
+            %strong
+              HAML Style:
+            %pre
+              :plain              
+                = fancy_uploads @person            
+          %p
+            %strong
+              ERB Style:
+            %pre
+              :plain
+                <%= fancy_uploads @person %>
+                
+        %li
+          %p
+            <strong>fancy_uploads</strong> view helper options                      
+          %ul
+            %li 
+              :plain 
+                :new_upload_label => String
+              %br
+              Default is "Add Upload"
+            %li 
+              :plain
+                :per_page => Fixnum 
+              %br
+              Default is FancyUpload.per_page
+            %li 
+              :plain
+                :include_jquery => [TrueClass | FalseClass]
+              %br
+                Default is true
+
+            %li 
+              HAML-style example with overriding defaults
+              %pre
+                :plain
+                  = fancy_uploads @person, { :new_upload_label => "Add Uploads!!!", :per_page => 2, :include_jquery => false }
+
+            %li 
+              ERB-style example with overriding defaults
+              %pre
+                :plain
+                  <%= fancy_uploads @person, { :new_upload_label => "Add Uploads!!!", :per_page => 2, :include_jquery => false } %>
+
+
+%div{:style=>"font-size:16px; margin-top: 10px; "}
+  :plain
+    => 
+  Click on "Show" to see and upload fancy uploads attached to the Person object.
+
+%table
+  %tr
+    %th
+      Name
+  - @people.each do |person|
+    %tr
+      %td
+        = h person.name
+      %td
+        = link_to 'Show', person  
+      

@@ -1,0 +1,3 @@
+class FancyImage < FancyUpload
+  
+end

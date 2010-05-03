@@ -1,0 +1,13 @@
+!!!
+%html{ "xml:lang" => "en", :lang => "en", :xmlns => "http://www.w3.org/1999/xhtml" }
+  %head
+    %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "content-type" }
+    %title
+      People:
+      = controller.action_name
+    = stylesheet_link_tag 'scaffold'
+    = javascript_include_tag "http://code.jquery.com/jquery-1.4.2.min.js"
+  %body
+    %p{ :style => "color: green" }
+      = flash[:notice]
+    = yield

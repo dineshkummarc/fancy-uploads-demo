@@ -1,0 +1,10 @@
+page << growl("Upload Deleted.")
+page << "$j('##{dom_id(@fancy_upload)}').fadeOut('normal', function(){ $j(this).remove(); })"
+
+fancy_uploads_dom_id = "#{@attachable.class.to_s}_#{@attachable.id}_fancy_uploads"
+container_dom_id = "#{fancy_uploads_dom_id}_container"
+
+# if singular relation to attachable, reveal the add new link
+if @attachable.respond_to?(@fancy_upload.class.to_s.underscore)
+  page << "$j('div##{container_dom_id} div.add_new').fadeIn();"
+end

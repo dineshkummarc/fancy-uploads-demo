@@ -1,0 +1,102 @@
+-# Renders a single fancy upload instance
+
+- fu_dom_id = fancy_upload.id.nil? ? "fancy_upload_tmp_#{fancy_upload.object_id}" : dom_id(fancy_upload)
+- iframe_id = "iframe_#{fu_dom_id}"  
+- fu_info_id = "info_#{fu_dom_id}"
+- fu_delete_form_id = "delete_form_#{fu_dom_id}"
+- fu_form_path = fancy_upload.id.nil? ? create_fancy_upload_path : update_fancy_upload_path(fancy_upload)
+- fu_form_style = fancy_upload.id.nil? ? "" : "display:none;"
+
+%li.fancy_upload{:id => fu_dom_id}
+
+  -# uploaded item (if one exists)
+  - unless fancy_upload.id.nil?
+    %div.uploaded_item
+      %div.float_left{:style => "position:relative;z-index:5;"}
+        - if fancy_upload.is_image?
+          -  if File.file?fancy_upload.path(:thumb)
+            = link_to image_tag(fancy_upload.url(:thumb), :alt => fancy_upload.filename(short=false), :class => "thumb_image"), fancy_upload.url, :class => "fancybox_image"
+          - else
+            = link_to fu_pic_html(:alt => fancy_upload.filename(short=false)), fancy_upload.url, :class => "fancybox_image"
+          
+        - elsif fancy_upload.is_audio?
+          = link_to fu_audio_html, fancy_upload.url, :title => "Download the audio", :class => "fu_download_link", :target => "_blank"
+        
+        - elsif fancy_upload.is_video?
+          = link_to fu_video_html, fancy_upload.url, :title => "Download the video", :class => "fu_download_link", :target => "_blank"
+        
+        - else
+          = link_to fu_file_html, fancy_upload.url, :title => "Download the file", :class => "fu_download_link", :target => "_blank"
+        
+      %div.float_right.uploaded_item_actions
+        %div{:style => "margin:0px;"}
+          = link_to fu_info_html, "##{fu_info_id}", :class => "fancybox_image", :title => "Upload Info"
+          -# upload info, hidden and shown via fancybox interaction
+          %div{:style => "display:none;" }
+            %div{:style => "width:800px;", :id => fu_info_id }
+              %ul.fu_upload_info
+                %li
+                  %strong
+                    URL:
+                  %br
+                  - host_address = (request.port == 80) ? request.host : "#{request.host}:#{request.port}"
+                  = "http://#{host_address}#{fancy_upload.url}"
+                %li
+                  %strong
+                    Created At:
+                  %br
+                  = fancy_upload.created_at
+                %li
+                  %strong
+                    Updated At:
+                  %br
+                  = fancy_upload.updated_at
+                %li
+                  %strong
+                    Original File Name:
+                  %br
+                  = fancy_upload.filename(short=false)
+                %li
+                  %strong
+                    File Type:
+                  %br
+                  = fancy_upload.filetype
+        -# edit button          
+        %div{:style => "margin-bottom:10px;"}
+          = fu_edit_html :onclick => "$j(this).trigger('show_upload_form')", :style => "cursor:pointer;", :title => "Edit this upload"
+        -# delete button
+        %div{:style => "margin-bottom:10px;"}
+          - form_for fancy_upload, :url => destroy_fancy_upload_path(fancy_upload), :html => { :class => "fu_delete_form" } do |f|
+            %input{:type => "hidden", :name => "_method", :value => "delete" }
+            = fu_spinner_html :class => "spinner", :style => "display:none;"
+            = fu_delete_html :class => "delete", :style => "cursor:pointer;", :onclick => "if (confirm('Delete? Are you sure?')) $j(this).closest('form').submit();", :title => "Delete this upload"
+        
+      %div.clear
+      %div{:style=>"text-align:center;"}
+        = fancy_upload.filename
+    
+  -# upload form
+  - form_for fancy_upload, :url => fu_form_path, :html => { :target => iframe_id, :multipart => :true, :method => :post, :class => "upload_form", :style => fu_form_style } do |f|
+    -# needed to invoke the update action
+    - unless fancy_upload.id.nil?
+      %input{:type => "hidden", :name => "_method", :value => "put" }
+
+    %div.file_inputs
+      = f.file_field :attached_upload, :class => "file", :onchange => "$j(this).trigger('file_field_changed', $j(this).attr('value'));"
+      %div.fake_file
+        %input.fake_input{:type => "text"}
+        = fu_search_html :title => "Browse for file"
+    %div{:style => "text-align:center;"}
+      -# ui fields
+      = fu_spinner_html :class => "spinner", :style => "display:none;"
+      = fu_save_html :style => "cursor:pointer", :title => "Upload", :class => "save spun", :onclick => "$j(this).trigger('start_upload');"
+      = fu_close_html :style => "cursor:pointer", :title => "Cancel Upload", :class => "cancel", :onclick => "$j(this).trigger('cancel_upload');"
+      -# hidden fields
+      = f.hidden_field :attachable_type, :value => fancy_upload.attachable.class.to_s
+      = f.hidden_field :attachable_id, :value => fancy_upload.attachable.id
+      - fields_for :dom do |dom|
+        = dom.hidden_field :dom_id, :value => fu_dom_id
+        = dom.hidden_field :upload_model, :value => fancy_upload.class.to_s
+  
+  -# upload target specified to the iframe  
+  %iframe{:id => iframe_id, :name => iframe_id, :style => "display:none;"}

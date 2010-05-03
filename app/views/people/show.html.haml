@@ -1,0 +1,29 @@
+%p
+  %b
+    Name:
+  = h @person.name
+
+%h4
+  Uploads will be deleted 15 minutes after it's creation. 
+
+= fancy_uploads @person, { :new_upload_label => "Add Upload", :per_page => 2, :include_jquery => false }
+
+= link_to 'Back', people_path
+|
+= link_to_function "Page Code", "$j('#page_code').toggle('slow');"
+  
+%pre#page_code{:style=>"display:none;"}
+  :preserve  
+    %p
+      %b
+        Name:
+      = h @person.name
+
+    %h4
+      Uploads will be deleted 15 minutes after it's creation. 
+
+    = fancy_uploads @person, { :new_upload_label => "Add Upload", :per_page => 10, :include_jquery => false }
+
+    = link_to 'Back', people_path
+  
+    
