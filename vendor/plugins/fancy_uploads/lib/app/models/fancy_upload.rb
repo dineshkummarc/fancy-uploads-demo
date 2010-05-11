@@ -24,7 +24,7 @@ class FancyUpload < ActiveRecord::Base
     :url => "/uploads/:class/:attachment/:id/:style.:extension",
     :path => ":rails_root/public/uploads/:class/:attachment/:id/:style.:extension",
     :whiny => false
-  validates_attachment_size :attached_upload, :in => 1..20.megabytes
+  validates_attachment_size :attached_upload, :in => 1..500.kilobytes
   validates_attachment_presence :attached_upload
 
   # association validates

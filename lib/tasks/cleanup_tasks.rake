@@ -6,6 +6,7 @@ task :cleanup_fancy_uploads => :environment do
     diff =  Time.now.to_i - fu.created_at.to_i    
     if diff > range
       fu.delete
+			puts fu.inspect
     end
   end
   

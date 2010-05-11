@@ -3,8 +3,11 @@
     Name:
   = h @person.name
 
-%h4
-  Uploads will be deleted 15 minutes after it's creation. 
+%ul{:style=>"color:maroon"}
+  %li
+    Uploads will be deleted <strong>15 minutes</strong> after its creation. 
+  %li
+    Upload size is limited to <strong>500 KBytes</strong>.
 
 = fancy_uploads @person, { :new_upload_label => "Add Upload", :per_page => 2, :include_jquery => false }
 
@@ -18,9 +21,6 @@
       %b
         Name:
       = h @person.name
-
-    %h4
-      Uploads will be deleted 15 minutes after it's creation. 
 
     = fancy_uploads @person, { :new_upload_label => "Add Upload", :per_page => 10, :include_jquery => false }
 
